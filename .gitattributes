@@ -1,0 +1,40 @@
+# Set default behavior to automatically normalize line endings
+* text=auto
+
+# Explicitly declare text files to be normalized
+*.java text
+*.kt text
+*.kts text
+*.xml text
+*.yml text
+*.yaml text
+*.properties text
+*.md text
+*.html text
+*.css text
+*.js text
+*.jsx text
+*.ts text
+*.tsx text
+*.json text
+*.sql text
+*.txt text
+*.sh text eol=lf
+*.bat text eol=crlf
+
+# Binary files that should not be modified
+*.jar binary
+*.war binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.ttf binary
+*.otf binary
+*.eot binary
+*.woff binary
+*.woff2 binary
+*.mp3 binary
+*.mp4 binary
+*.pdf binary
