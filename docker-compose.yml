@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14
+    container_name: spotistate-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: spotistate
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres-data-4:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+    container_name: spotistate-backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/spotistate
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPOTIFY_CLIENT_ID: xxx
+      SPOTIFY_CLIENT_SECRET: xxx
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: spotistate-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres-data-4:

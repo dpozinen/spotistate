@@ -1,0 +1,38 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/spotistate
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: false
+  security:
+    oauth2:
+      client:
+        registration:
+          spotify:
+            client-id: ${SPOTIFY_CLIENT_ID:xxx}
+            client-secret: ${SPOTIFY_CLIENT_SECRET:xxx}
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/api/auth/callback"
+            scope: user-read-private,user-read-email,playlist-read-private,playlist-read-collaborative,user-library-read
+        provider:
+          spotify:
+            authorization-uri: https://accounts.spotify.com/authorize
+            token-uri: https://accounts.spotify.com/api/token
+            user-info-uri: https://api.spotify.com/v1/me
+            user-name-attribute: id
+
+spotify:
+  client-id: ${SPOTIFY_CLIENT_ID:xxx}
+  client-secret: ${SPOTIFY_CLIENT_SECRET:xxx}
+  redirect-uri: "http://localhost:8080/api/auth/callback"
+
+server:
+  port: 8080

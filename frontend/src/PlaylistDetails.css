@@ -1,0 +1,248 @@
+.playlist-details-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.playlist-details-overlay.closing {
+  animation: fadeOut 0.3s ease-out forwards;
+}
+
+.playlist-details {
+  background-color: var(--spotify-dark-gray);
+  width: 85%;
+  max-width: 1200px;
+  height: 85%;
+  border-radius: 8px;
+  overflow-y: auto;
+  padding: 24px;
+  color: white;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.3s ease-out;
+}
+
+.playlist-details.closing {
+  animation: slideOut 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideOut {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(30px); opacity: 0; }
+}
+
+.details-header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 30px;
+}
+
+.back-button-container {
+  margin-bottom: 20px;
+}
+
+.playlist-header-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.playlist-info-header {
+  display: flex;
+  align-items: flex-start;
+}
+
+.playlist-text-info {
+  flex: 1;
+}
+
+.back-button {
+  background-color: var(--spotify-green);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: black;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.back-button:hover {
+  background-color: white;
+  color: var(--spotify-dark-gray);
+  transform: scale(1.05);
+}
+
+.playlist-details-image {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  margin-right: 20px;
+  box-shadow: 0 4px 60px rgba(0, 0, 0, 0.5);
+}
+
+.playlist-info-header h2 {
+  margin: 0 0 10px 0;
+  font-size: 2rem;
+}
+
+.playlist-info-header p {
+  margin: 0 0 15px 0;
+  color: #b3b3b3;
+}
+
+.spotify-link {
+  color: var(--spotify-green);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.spotify-link:hover {
+  text-decoration: underline;
+}
+
+.search-box {
+  width: 250px;
+  position: absolute;
+  top: 0;
+  right: 24px;
+}
+
+.search-box input {
+  background-color: #2a2a2a;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 15px;
+  width: 100%;
+  color: white;
+}
+
+.tracks-list {
+  margin-top: 20px;
+}
+
+.track-header, .track-item {
+  display: grid;
+  grid-template-columns: 3fr 2fr 2fr 1fr;
+  padding: 10px;
+  align-items: center;
+  position: relative;
+}
+
+.track-header {
+  color: #b3b3b3;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.track-item {
+  border-radius: 4px;
+}
+
+.track-item:hover {
+  background-color: #2a2a2a;
+}
+
+.track-item::after, .track-header::after {
+  content: '';
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  bottom: 0;
+  height: 1px;
+  background-color: #333;
+}
+
+.track-item:last-child::after {
+  display: none;
+}
+
+.track-header .sortable {
+  cursor: pointer;
+  transition: color 0.2s;
+  user-select: none;
+}
+
+.track-header .sortable:hover {
+  color: var(--spotify-white);
+}
+
+.track-header .sortable.active {
+  color: var(--spotify-green);
+}
+
+.track-name a {
+  color: white;
+  text-decoration: none;
+}
+
+.track-name a:hover {
+  color: var(--spotify-green);
+  text-decoration: underline;
+}
+
+.track-artist, .track-album {
+  color: #b3b3b3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.track-duration {
+  color: #b3b3b3;
+  text-align: right;
+  padding-right: 10px;
+}
+
+.loading, .no-tracks {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: #b3b3b3;
+}
+
+@media (max-width: 768px) {
+  .search-box {
+    position: relative;
+    width: 100%;
+    margin-top: 15px;
+  }
+  
+  .track-header, .track-item {
+    grid-template-columns: 3fr 2fr 1fr;
+  }
+  
+  .track-album {
+    display: none;
+  }
+}
