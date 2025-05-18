@@ -17,10 +17,10 @@ spring:
       client:
         registration:
           spotify:
-            client-id: ${SPOTIFY_CLIENT_ID:xxx}
-            client-secret: ${SPOTIFY_CLIENT_SECRET:xxx}
+            client-id: ${SPOTIFY_CLIENT_ID:}
+            client-secret: ${SPOTIFY_CLIENT_SECRET:}
             authorization-grant-type: authorization_code
-            redirect-uri: "http://127.0.0.1:8080/api/auth/callback"
+            redirect-uri: http://127.0.0.1:8080/api/auth/callback
             scope: user-read-private,user-read-email,playlist-read-private,playlist-read-collaborative,user-library-read
         provider:
           spotify:
@@ -30,9 +30,25 @@ spring:
             user-name-attribute: id
 
 spotify:
-  client-id: ${SPOTIFY_CLIENT_ID:xxx}
-  client-secret: ${SPOTIFY_CLIENT_SECRET:xxx}
-  redirect-uri: "http://127.0.0.1:8080/api/auth/callback"
+  client-id: ${SPOTIFY_CLIENT_ID:}
+  client-secret: ${SPOTIFY_CLIENT_SECRET:}
+  redirect-uri: http://127.0.0.1:8080/api/auth/callback
 
 server:
   port: 8080
+
+# Management endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+
+# Application info
+info:
+  app:
+    name: "Spotistate"
+    description: "Import and store your Spotify library"

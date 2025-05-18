@@ -1,0 +1,64 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+README.md
+.editorconfig
+
+# IDEs
+.idea
+.vscode
+*.iml
+*.iws
+*.ipr
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Application specific
+.env
+*.env
+
+# Frontend
+frontend/node_modules
+frontend/build
+frontend/coverage
+frontend/.eslintcache
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+# Backend
+backend/build
+backend/.gradle
+backend/gradle-wrapper.jar
+backend/gradlew
+backend/gradlew.bat
+backend/bin
+backend/out
+backend/target
+
+# Docker
+docker-compose.yml
+docker-compose.override.yml
+Dockerfile
+.dockerignore
+
+# GitHub
+.github
+
+# Testing
+backend/src/test
+frontend/src/**/*.test.js
+frontend/src/**/*.test.jsx
+
+# Logs
+*.log
+logs
+
+# Temporary files
+temp-*
+*.tmp

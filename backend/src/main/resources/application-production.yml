@@ -1,0 +1,39 @@
+# Production-specific configuration
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:validate}
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        
+# Production logging
+logging:
+  level:
+    root: ${LOG_LEVEL_ROOT:WARN}
+    com.spotistate: ${LOG_LEVEL_SPOTISTATE:INFO}
+    org.springframework.security: ERROR
+    org.springframework.web: WARN
+    org.hibernate.SQL: WARN
+  file:
+    name: ${LOGGING_FILE_NAME:/app/logs/spotistate.log}
+
+# Production management endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: never
+  health:
+    diskspace:
+      enabled: true
+      threshold: ${HEALTH_DISKSPACE_THRESHOLD:10MB}
+
+# Security for actuator endpoints
+management:
+  security:
+    enabled: true
