@@ -1,14 +1,15 @@
 # Multi-stage Dockerfile for Spotistate
 # Stage 1: Build Frontend
-FROM node:18-alpine AS frontend-build
+FROM node:18 AS frontend-build
 
 WORKDIR /app/frontend
 
 # Copy package files
 COPY frontend/package*.json ./
 
-# Install dependencies
-RUN npm ci
+# Clear npm cache and install dependencies
+RUN npm cache clean --force
+RUN npm install
 
 # Copy frontend source code
 COPY frontend/ ./
