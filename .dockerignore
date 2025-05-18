@@ -34,9 +34,6 @@ frontend/yarn-error.log*
 # Backend
 backend/build
 backend/.gradle
-backend/gradle-wrapper.jar
-backend/gradlew
-backend/gradlew.bat
 backend/bin
 backend/out
 backend/target

@@ -25,8 +25,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/spotistate
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
-      SPOTIFY_CLIENT_ID: xxx
-      SPOTIFY_CLIENT_SECRET: xxx
+      SPOTIFY_CLIENT_ID: b3566303ebfc473188e470275408f712
+      SPOTIFY_CLIENT_SECRET: fe3ef5c4df8f4c7cb11adcb9f05cfdca
 
   frontend:
     build:

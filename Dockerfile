@@ -24,8 +24,12 @@ WORKDIR /app/backend
 # Copy Gradle files
 COPY backend/gradle/ ./gradle/
 COPY backend/gradlew ./
+COPY backend/gradlew.bat ./
 COPY backend/build.gradle.kts ./
 COPY backend/settings.gradle.kts ./
+
+# Make gradlew executable
+RUN chmod +x ./gradlew
 
 # Download dependencies (this layer will be cached if dependencies don't change)
 RUN ./gradlew dependencies --no-daemon
