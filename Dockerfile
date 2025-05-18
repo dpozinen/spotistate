@@ -18,7 +18,7 @@ COPY frontend/ ./
 RUN npm run build
 
 # Stage 2: Build Backend
-FROM gradle:8.4-jdk17-alpine AS backend-build
+FROM gradle:8.4-jdk17 AS backend-build
 
 WORKDIR /app/backend
 
