@@ -45,13 +45,22 @@ function Home() {
 
     // Get user info
     fetch(`http://localhost:8080/api/auth/user-info?token=${token}&userId=${userId}`)
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Failed to fetch user info: ${response.status}`);
+        }
+        return response.json();
+      })
       .then(data => {
         setUserName(data.user.displayName || 'Spotify User');
       })
       .catch(error => {
         console.error('Error fetching user info:', error);
-        setError('Failed to fetch user information. Please try again.');
+        // If user info fetch fails, logout and redirect to login
+        localStorage.removeItem('spotistate_token');
+        localStorage.removeItem('spotistate_user_id');
+        navigate('/login');
+        return; // Exit early to prevent further execution
       });
 
     // Get playlists

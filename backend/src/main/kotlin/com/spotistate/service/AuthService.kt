@@ -4,6 +4,7 @@ import com.spotistate.dto.AuthResponseDTO
 import com.spotistate.dto.UserDTO
 import com.spotistate.model.User
 import com.spotistate.repository.UserRepository
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import se.michaelthelin.spotify.SpotifyApi
 import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials
@@ -14,44 +15,61 @@ class AuthService(
     private val spotifyApi: SpotifyApi,
     private val userRepository: UserRepository
 ) {
+    private val logger = LoggerFactory.getLogger(AuthService::class.java)
 
     fun handleSpotifyCallback(code: String): AuthResponseDTO {
-        val credentials = getSpotifyCredentials(code)
-        spotifyApi.accessToken = credentials.accessToken
+        logger.info("Processing Spotify callback with authorization code")
         
-        val userProfile = spotifyApi.currentUsersProfile.build().execute()
-        
-        val existingUser = userRepository.findBySpotifyId(userProfile.id)
-        val user = if (existingUser != null) {
-            existingUser.copy(
+        return try {
+            val credentials = getSpotifyCredentials(code)
+            logger.info("Successfully obtained Spotify credentials")
+            
+            spotifyApi.accessToken = credentials.accessToken
+            val userProfile = spotifyApi.currentUsersProfile.build().execute()
+            logger.info("Successfully fetched user profile for: {}", userProfile.id)
+            
+            val existingUser = userRepository.findBySpotifyId(userProfile.id)
+            val user = if (existingUser != null) {
+                logger.info("Updating existing user: {}", userProfile.id)
+                existingUser.copy(
+                    accessToken = credentials.accessToken,
+                    refreshToken = credentials.refreshToken ?: existingUser.refreshToken
+                )
+            } else {
+                logger.info("Creating new user: {}", userProfile.id)
+                User(
+                    id = UUID.randomUUID().toString(),
+                    spotifyId = userProfile.id,
+                    email = userProfile.email,
+                    displayName = userProfile.displayName,
+                    accessToken = credentials.accessToken,
+                    refreshToken = credentials.refreshToken ?: ""
+                )
+            }
+            
+            val savedUser = userRepository.save(user)
+            logger.info("Successfully saved user: {}", savedUser.id)
+            
+            AuthResponseDTO(
                 accessToken = credentials.accessToken,
-                refreshToken = credentials.refreshToken ?: existingUser.refreshToken
+                user = UserDTO(
+                    id = savedUser.id,
+                    displayName = savedUser.displayName,
+                    email = savedUser.email
+                )
             )
-        } else {
-            User(
-                id = UUID.randomUUID().toString(),
-                spotifyId = userProfile.id,
-                email = userProfile.email,
-                displayName = userProfile.displayName,
-                accessToken = credentials.accessToken,
-                refreshToken = credentials.refreshToken ?: ""
-            )
+        } catch (e: Exception) {
+            logger.error("Error during Spotify callback processing: {}", e.message, e)
+            throw RuntimeException("Failed to process Spotify authentication", e)
         }
-        
-        val savedUser = userRepository.save(user)
-        
-        return AuthResponseDTO(
-            accessToken = credentials.accessToken,
-            user = UserDTO(
-                id = savedUser.id,
-                displayName = savedUser.displayName,
-                email = savedUser.email
-            )
-        )
     }
 
     fun getUserInfo(userId: String): UserDTO {
-        val user = userRepository.findById(userId).orElseThrow { RuntimeException("User not found") }
+        logger.info("Fetching user info for ID: {}", userId)
+        val user = userRepository.findById(userId).orElseThrow { 
+            logger.error("User not found with ID: {}", userId)
+            RuntimeException("User not found") 
+        }
         return UserDTO(
             id = user.id,
             displayName = user.displayName,
@@ -60,18 +78,50 @@ class AuthService(
     }
 
     private fun getSpotifyCredentials(code: String): AuthorizationCodeCredentials {
-        return spotifyApi.authorizationCode(code).build().execute()
+        logger.info("Exchanging authorization code for access token")
+        return try {
+            val credentials = spotifyApi.authorizationCode(code).build().execute()
+            logger.info("Successfully exchanged authorization code for credentials")
+            credentials
+        } catch (e: Exception) {
+            logger.error("Failed to exchange authorization code: {}", e.message, e)
+            when (e) {
+                is se.michaelthelin.spotify.exceptions.detailed.BadRequestException -> {
+                    logger.error("Bad request error details: message={}", e.message)
+                }
+                is se.michaelthelin.spotify.exceptions.detailed.UnauthorizedException -> {
+                    logger.error("Unauthorized error details: message={}", e.message)
+                }
+                is se.michaelthelin.spotify.exceptions.detailed.ForbiddenException -> {
+                    logger.error("Forbidden error details: message={}", e.message)
+                }
+                is se.michaelthelin.spotify.exceptions.SpotifyWebApiException -> {
+                    logger.error("Spotify API error details: message={}", e.message)
+                }
+            }
+            throw e
+        }
     }
 
     fun refreshToken(userId: String): String {
-        val user = userRepository.findById(userId).orElseThrow { RuntimeException("User not found") }
-        spotifyApi.refreshToken = user.refreshToken
+        logger.info("Refreshing token for user: {}", userId)
+        val user = userRepository.findById(userId).orElseThrow { 
+            logger.error("User not found for token refresh: {}", userId)
+            RuntimeException("User not found") 
+        }
         
-        val credentials = spotifyApi.authorizationCodeRefresh().build().execute()
-        
-        val updatedUser = user.copy(accessToken = credentials.accessToken)
-        userRepository.save(updatedUser)
-        
-        return credentials.accessToken
+        return try {
+            spotifyApi.refreshToken = user.refreshToken
+            val credentials = spotifyApi.authorizationCodeRefresh().build().execute()
+            logger.info("Successfully refreshed token for user: {}", userId)
+            
+            val updatedUser = user.copy(accessToken = credentials.accessToken)
+            userRepository.save(updatedUser)
+            
+            credentials.accessToken
+        } catch (e: Exception) {
+            logger.error("Failed to refresh token for user {}: {}", userId, e.message, e)
+            throw RuntimeException("Failed to refresh token", e)
+        }
     }
 }

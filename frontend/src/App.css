@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  position: relative;
 }
 
 .App-header {
@@ -59,4 +60,80 @@
 .login-button:hover {
   background-color: #1ed760;
   text-decoration: none;
+}
+
+/* Error popup styles - same as Home.css */
+.error-inline {
+  position: fixed;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 80%;
+  max-width: 800px;
+  z-index: 1000;
+}
+
+.error-inline .error-content {
+  background-color: #282828;
+  padding: 15px 20px;
+  border-radius: 8px;
+  border-left: 4px solid #e22d44;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.4s ease-out;
+}
+
+.error-inline.fade-out .error-content {
+  animation: fadeOutDown 0.5s ease-in forwards;
+}
+
+.error-inline .error-icon {
+  font-size: 24px;
+  margin-right: 15px;
+  color: #e22d44;
+}
+
+.error-inline p {
+  color: white;
+  margin: 0;
+  margin-right: auto;
+  font-size: 16px;
+}
+
+.error-inline button {
+  background-color: #e22d44;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 8px 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.error-inline button:hover {
+  background-color: #f44336;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOutDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(30px);
+  }
 }

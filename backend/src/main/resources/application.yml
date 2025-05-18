@@ -20,7 +20,7 @@ spring:
             client-id: ${SPOTIFY_CLIENT_ID:xxx}
             client-secret: ${SPOTIFY_CLIENT_SECRET:xxx}
             authorization-grant-type: authorization_code
-            redirect-uri: "{baseUrl}/api/auth/callback"
+            redirect-uri: "http://127.0.0.1:8080/api/auth/callback"
             scope: user-read-private,user-read-email,playlist-read-private,playlist-read-collaborative,user-library-read
         provider:
           spotify:
@@ -32,7 +32,7 @@ spring:
 spotify:
   client-id: ${SPOTIFY_CLIENT_ID:xxx}
   client-secret: ${SPOTIFY_CLIENT_SECRET:xxx}
-  redirect-uri: "http://localhost:8080/api/auth/callback"
+  redirect-uri: "http://127.0.0.1:8080/api/auth/callback"
 
 server:
   port: 8080

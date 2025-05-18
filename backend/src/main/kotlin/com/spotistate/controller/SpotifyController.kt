@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/spotify")
+@CrossOrigin(origins = ["http://localhost:3000", "http://127.0.0.1:3000"])
 class SpotifyController(private val spotifyService: SpotifyService) {
 
     @PostMapping("/import/{userId}")
