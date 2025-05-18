@@ -1,0 +1,10 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Top curved line (longest) -->
+  <path d="M6 15c7.5 0 18 3 36 12" stroke="black" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Middle curved line -->
+  <path d="M9 24c6 0 15 2.25 30 9" stroke="black" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Bottom curved line (shortest) -->
+  <path d="M12 33c4.5 0 12 1.5 24 6.75" stroke="black" stroke-width="4" stroke-linecap="round"/>
+</svg>
